@@ -306,14 +306,14 @@ private:
 
     static void clientHandler(net::Conn _client, void* ctx) {
         SigctlServerModule* _this = (SigctlServerModule*)ctx;
-        //flog::info("New client!");
+        // flog::info("New client!");
 
         _this->client = std::move(_client);
         _this->client->readAsync(1024, _this->dataBuf, dataHandler, _this, false);
         _this->client->waitForEnd();
         _this->client->close();
 
-        //flog::info("Client disconnected!");
+        // flog::info("Client disconnected!");
 
         _this->listener->acceptAsync(clientHandler, _this);
     }
@@ -552,7 +552,10 @@ private:
         }
         else if (parts[0] == "\\chk_vfo") {
             std::lock_guard lck(vfoMtx);
-            resp = "CHKVFO 0\n";
+            // See
+            // https://github.com/AlexandreRouma/SDRPlusPlus/issues/573#issuecomment-1500965072
+            // resp = "CHKVFO 0\n";
+            resp = "RPRT 1\n";
             client->write(resp.size(), (uint8_t*)resp.c_str());
         }
         else if (parts[0] == "s") {
@@ -628,15 +631,15 @@ private:
                 /* ITU region */
                 "1\n"
                 /* RX/TX frequency ranges
-                * start, end, modes, low_power, high_power, vfo, ant
-                *  start/end - Start/End frequency [Hz]
-                *  modes - Bit field of RIG_MODE's (AM|AMS|CW|CWR|USB|LSB|FM|WFM)
-                *  low_power/high_power - Lower/Higher RF power in mW,
-                *                         -1 for no power (ie. rx list)
-                *  vfo - VFO list equipped with this range (RIG_VFO_A)
-                *  ant - Antenna list equipped with this range, 0 means all
-                *  FIXME: get limits from receiver
-                */
+                 * start, end, modes, low_power, high_power, vfo, ant
+                 *  start/end - Start/End frequency [Hz]
+                 *  modes - Bit field of RIG_MODE's (AM|AMS|CW|CWR|USB|LSB|FM|WFM)
+                 *  low_power/high_power - Lower/Higher RF power in mW,
+                 *                         -1 for no power (ie. rx list)
+                 *  vfo - VFO list equipped with this range (RIG_VFO_A)
+                 *  ant - Antenna list equipped with this range, 0 means all
+                 *  FIXME: get limits from receiver
+                 */
                 "0.000000 10000000000.000000 0x2ef -1 -1 0x1 0x0\n"
                 /* End of RX frequency ranges. */
                 "0 0 0 0 0 0 0\n"
@@ -648,8 +651,8 @@ private:
                 /* End of tuning steps */
                 "0 0\n"
                 /* Filter sizes: modes, width
-                * FIXME: get filter sizes from presets
-                */
+                 * FIXME: get filter sizes from presets
+                 */
                 "0x82 500\n"    /* CW | CWR normal */
                 "0x82 200\n"    /* CW | CWR narrow */
                 "0x82 2000\n"   /* CW | CWR wide */

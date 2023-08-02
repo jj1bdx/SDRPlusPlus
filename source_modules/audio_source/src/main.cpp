@@ -90,6 +90,12 @@ public:
                 auto info = audio.getDeviceInfo(i);
 
                 // Check that it has a stereo input
+                // if (info.probed && info.inputChannels < 2) { continue; }
+                //
+                // rtaudio 6.0 does not have struct member "probed"
+                // See
+                // <https://github.com/thestk/rtaudio/issues/365>
+                //
                 if (info.probed && info.inputChannels < 2) { continue; }
 
                 // Save info

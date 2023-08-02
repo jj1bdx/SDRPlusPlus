@@ -96,7 +96,7 @@ public:
                 // See
                 // <https://github.com/thestk/rtaudio/issues/365>
                 //
-                if (info.probed && info.inputChannels < 2) { continue; }
+                if (info.inputChannels < 2) { continue; }
 
                 // Save info
                 DeviceInfo dinfo = { info, i };

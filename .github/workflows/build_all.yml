@@ -137,13 +137,13 @@ jobs:
           with:
               name: sdrpp_macos_intel
               path: ${{runner.workspace}}/sdrpp_macos_intel.zip
-  
+
     build_debian_buster:
         runs-on: ubuntu-latest
 
         steps:
         - uses: actions/checkout@v3
-        
+
         - name: Create Docker Image
           run: cd $GITHUB_WORKSPACE/docker_builds/debian_buster && docker build . --tag sdrpp_build
 
